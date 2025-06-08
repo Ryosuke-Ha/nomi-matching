@@ -10,7 +10,6 @@ const Layout: React.FC<LayoutProps> = () => {
   const [open, setOpen] = useState(true);
   const menuItems = [
     { title: "飲み友達検索", icon: "search", path: "/search" },
-    { title: "オファー送信", icon: "send", path: "/invite" },
     { title: "チャット機能", icon: "chat", path: "/chat" },
     { title: "決済機能", icon: "payment", path: "/payment" },
   ];
