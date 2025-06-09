@@ -21,9 +21,9 @@
 
 /* Sidebar container */
 .sidebar {
+  position: relative;
   display: flex;
   flex-direction: column;
-  height: 100vh;
   background: #343a40;
   color: #fff;
   transition: width 0.3s ease;
@@ -41,12 +41,19 @@
 
 /* Header (Home button) */
 .sidebar-header.menu-item {
-  padding: 1rem;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #fff; /* enforce white */
-  justify-content: center; /* center horizontally */
-  text-align: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  color: #fff;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+.sidebar-header.menu-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+.sidebar-header.menu-item .title {
+  margin-left: 1rem;
 }
 
 /* Menu list */
@@ -85,20 +92,29 @@
   white-space: nowrap;
 }
 
-/* Toggle button */
-/* Toggle button fixed bottom-left */
+/* Toggle button fixed bottom-left, match menu-item width */
+/* Ensure toggle is always pinned at bottom */
+.sidebar {
+  position: relative;
+}
 .sidebar .toggle-button {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  padding: 0.75rem;
+  padding: 0.75rem 1rem; /* match .menu-item */
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #fff;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background 0.2s ease;
 }
 .sidebar .toggle-button i.material-icons {
   color: #fff; /* ensure chevron icon white */
+  margin-right: 1rem;
 }
 .sidebar .toggle-button i.material-icons {
   color: #fff !important; /* override parent dark color */
