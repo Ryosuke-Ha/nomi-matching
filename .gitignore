@@ -25,3 +25,6 @@ yarn-error.log*
 # roo code
 /roo
 .roomodes
+
+# firebase
+/firestore-seed
