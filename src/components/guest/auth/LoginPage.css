@@ -1,0 +1,85 @@
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: space-between;
+  background: #f5f5f5;
+  padding: 20px;
+}
+
+.auth-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.beer-icon {
+  font-size: 32px;
+  color: #ffc107;
+}
+
+.auth-card {
+  background: #fff;
+  padding: 50px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 35px;
+}
+
+.auth-card input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 12px 0;
+}
+
+.auth-card button {
+  padding: 10px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 50%;
+  margin: 20px auto 0;
+  display: block;
+}
+
+.auth-card button:hover {
+  background: #0056b3;
+}
+
+.auth-link {
+  text-align: center;
+  margin-top: 10px;
+  display: block;
+  color: #007bff;
+}
+
+.auth-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: #777;
+}
+
+.auth-footer a {
+  color: #777;
+  text-decoration: none;
+}
+
+.auth-footer p {
+  margin-top: 5px;
+}
