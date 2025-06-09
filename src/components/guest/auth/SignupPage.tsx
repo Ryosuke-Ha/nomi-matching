@@ -98,6 +98,8 @@ const SignupPage: React.FC = () => {
         partySize: Number(form.participants),
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       });
+    sessionStorage.setItem("auth", "true");
+    sessionStorage.setItem("uid", uid);
     navigate("/");
   };
 
