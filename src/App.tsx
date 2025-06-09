@@ -1,4 +1,5 @@
 import React from "react";
+import ErrorPage from "./components/guest/auth/ErrorPage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./components/guest/Layout";
 import HomePage from "./components/guest/home/HomePage";
@@ -21,6 +22,7 @@ function App() {
           <Route path="payment" element={<PaymentPage />} />
           <Route path="chat" element={<ChatPage />} />
         </Route>
+        <Route path="/error" element={<ErrorPage />} />
       </Routes>
     </Router>
   );
