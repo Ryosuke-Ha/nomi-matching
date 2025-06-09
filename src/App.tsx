@@ -1,6 +1,7 @@
 import React from "react";
 import ErrorPage from "./components/guest/auth/ErrorPage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { PublicRoute, PrivateRoute } from "./components/guest/auth/RouteGuards";
 import Layout from "./components/guest/Layout";
 import HomePage from "./components/guest/home/HomePage";
 import SearchPage from "./components/guest/search/SearchPage";
@@ -14,13 +15,17 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/" element={<Layout />}>
-          <Route index element={<HomePage />} />
-          <Route path="search" element={<SearchPage />} />
-          <Route path="payment" element={<PaymentPage />} />
-          <Route path="chat" element={<ChatPage />} />
+        <Route element={<PublicRoute />}>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+        </Route>
+        <Route element={<PrivateRoute />}>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<HomePage />} />
+            <Route path="search" element={<SearchPage />} />
+            <Route path="payment" element={<PaymentPage />} />
+            <Route path="chat" element={<ChatPage />} />
+          </Route>
         </Route>
         <Route path="/error" element={<ErrorPage />} />
       </Routes>

@@ -1,5 +1,9 @@
-import React, { useState, FormEvent } from "react";
+import React, { useState, FormEvent, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { db } from "../../../firebaseConfig";
+import firebase from "firebase/compat/app";
+import "firebase/compat/firestore";
+import bcrypt from "bcryptjs";
 import "./SignupPage.css";
 
 type FormData = {
@@ -31,6 +35,7 @@ const SignupPage: React.FC = () => {
     participants: "",
   });
   const [errors, setErrors] = useState<Partial<FormData>>({});
+  const [areas, setAreas] = useState<{ id: number; name: string }[]>([]);
 
   const validateStep = (current: number) => {
     const errs: Partial<FormData> = {};
@@ -65,19 +70,55 @@ const SignupPage: React.FC = () => {
     setStep((s) => s - 1);
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    const uid = form.id; // TODO: replace with real Auth UID
+    const salt = bcrypt.genSaltSync(10);
+    const passwordHash = bcrypt.hashSync(form.password, salt);
+    await db.collection("accounts").doc(uid).set({
+      uid,
+      email: form.id,
+      passwordHash,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+    await db
+      .collection("userProfiles")
+      .doc(uid)
+      .set({
+        uid,
+        name: form.name,
+        age: Number(form.age),
+        gender: 1, // TODO: wire actual gender input
+        area: Number(form.region),
+        intro: form.bio,
+        availableDays: [], // TODO: map availability days
+        availableTimeStart: 0, // TODO: parse time start
+        availableTimeEnd: 0, // TODO: parse time end
+        personality: form.personality,
+        partySize: Number(form.participants),
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      });
     navigate("/");
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
-    const liveErrors = validateStep(step);
-    setErrors(liveErrors);
+    setErrors(validateStep(step));
   };
+
+  useEffect(() => {
+    (async () => {
+      const snapshot = await db.collection("areaMst").get();
+      setAreas(
+        snapshot.docs.map((doc) => doc.data() as { id: number; name: string })
+      );
+    })();
+  }, []);
 
   return (
     <div className="auth-container">
@@ -155,13 +196,19 @@ const SignupPage: React.FC = () => {
             <span className="error-message">{errors.age || ""}</span>
             <label htmlFor="region">
               地域 <span className="required">必須</span>
-              <input
+              <select
                 id="region"
                 name="region"
-                placeholder="地域"
                 value={form.region}
                 onChange={handleChange}
-              />
+              >
+                <option value="">地域を選択</option>
+                {areas.map((area) => (
+                  <option key={area.id} value={area.id.toString()}>
+                    {area.name}
+                  </option>
+                ))}
+              </select>
             </label>
             <span className="error-message">{errors.region || ""}</span>
             <div className="button-group">
