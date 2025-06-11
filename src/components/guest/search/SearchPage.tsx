@@ -11,7 +11,9 @@ interface User {
   region: string;
   intro: string;
   image: string;
-  availability: string;
+  availableDays: number[];
+  availableTimeStart: number;
+  availableTimeEnd: number;
   personality: string;
   maxPeople: number;
   gender: string;
@@ -68,9 +70,9 @@ const SearchPage: React.FC = () => {
             region: areas.filter((a) => a.id === p.area)[0]?.name || "",
             intro: p.intro,
             image: p.imageURL || "",
-            availability: `${p.availableDays.join("・")} ${
-              p.availableTimeStart
-            }-${p.availableTimeEnd}`,
+            availableDays: p.availableDays,
+            availableTimeStart: p.availableTimeStart,
+            availableTimeEnd: p.availableTimeEnd,
             personality: p.personality,
             maxPeople: p.partySize,
             gender: convertGender(p.gender),

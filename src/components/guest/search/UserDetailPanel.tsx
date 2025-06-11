@@ -7,7 +7,9 @@ interface User {
   region: string;
   intro: string;
   image: string;
-  availability: string;
+  availableDays: number[];
+  availableTimeStart: number;
+  availableTimeEnd: number;
   personality: string;
   maxPeople: number;
 }
@@ -28,6 +30,37 @@ const UserDetailPanel: React.FC<Props> = ({
   onGoToChat,
 }) => {
   const [message, setMessage] = useState("");
+
+  const convertAvailableInfo = (): string => {
+    const days = user.availableDays
+      .map((day) => {
+        switch (day) {
+          case 1:
+            return "月";
+          case 2:
+            return "火";
+          case 3:
+            return "水";
+          case 4:
+            return "木";
+          case 5:
+            return "金";
+          case 6:
+            return "土";
+          case 7:
+            return "日";
+          default:
+            return "";
+        }
+      })
+      .join(", ");
+    const start = String(user.availableTimeStart).padStart(4, "0");
+    const end = String(user.availableTimeEnd).padStart(4, "0");
+    return `${days} ${start.slice(0, 2)}:${start.slice(2)} - ${end.slice(
+      0,
+      2
+    )}:${end.slice(2)}`;
+  };
 
   return (
     <div className="detail-overlay">
@@ -54,7 +87,7 @@ const UserDetailPanel: React.FC<Props> = ({
             <strong>自己紹介:</strong> {user.intro}
           </p>
           <p>
-            <strong>空いてる曜日と時間:</strong> {user.availability}
+            <strong>空いてる曜日と時間:</strong> {convertAvailableInfo()}
           </p>
           <p>
             <strong>性格:</strong> {user.personality}
