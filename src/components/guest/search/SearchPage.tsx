@@ -167,7 +167,7 @@ const SearchPage: React.FC = () => {
             ))}
           </div>
         ) : (
-          <div className="no-results">検索結果なし</div>
+          <div className="no-results">検索条件を指定してください</div>
         )}
       </div>
       {selectedUser && (
