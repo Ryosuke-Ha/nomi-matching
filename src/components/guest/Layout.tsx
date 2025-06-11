@@ -15,48 +15,56 @@ const Layout: React.FC<LayoutProps> = () => {
   ];
 
   return (
-    <div className="layout-container">
-      <div className={`sidebar ${open ? "open" : "closed"}`}>
-        <Link to="/" className="menu-item sidebar-header">
-          <i className="material-icons" style={{ color: "#fff" }}>
-            home
-          </i>
-          {open && <span className="title">ホーム</span>}
-          {!open && <div className="tooltip">ホーム</div>}
-        </Link>
-        <ul>
-          {menuItems.map((item, idx) => (
-            <li key={idx}>
-              <Link to={item.path} className="menu-item">
-                <i className="material-icons">{item.icon}</i>
-                {open && <span className="title">{item.title}</span>}
-                {!open && <div className="tooltip">{item.title}</div>}
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <div className="toggle-button" onClick={() => setOpen(!open)}>
-          {open ? (
-            <>
-              <i className="material-icons" style={{ color: "#fff" }}>
-                chevron_left
-              </i>
-              <div className="tooltip">閉じる</div>
-            </>
-          ) : (
-            <>
-              <i className="material-icons" style={{ color: "#fff" }}>
-                chevron_right
-              </i>
-              <div className="tooltip">開く</div>
-            </>
-          )}
+    <>
+      {/* Mobile header */}
+      <Link to="/" className="mobile-header">
+        <span className="mobile-title">
+          <i className="material-icons">restaurant</i>Nomi Matching
+        </span>
+      </Link>
+      <div className="layout-container">
+        <div className={`sidebar ${open ? "open" : "closed"}`}>
+          <Link to="/" className="menu-item sidebar-header">
+            <i className="material-icons" style={{ color: "#fff" }}>
+              home
+            </i>
+            {open && <span className="title">ホーム</span>}
+            {!open && <div className="tooltip">ホーム</div>}
+          </Link>
+          <ul>
+            {menuItems.map((item, idx) => (
+              <li key={idx}>
+                <Link to={item.path} className="menu-item">
+                  <i className="material-icons">{item.icon}</i>
+                  {open && <span className="title">{item.title}</span>}
+                  {!open && <div className="tooltip">{item.title}</div>}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <div className="toggle-button" onClick={() => setOpen(!open)}>
+            {open ? (
+              <>
+                <i className="material-icons" style={{ color: "#fff" }}>
+                  chevron_left
+                </i>
+                <div className="tooltip">閉じる</div>
+              </>
+            ) : (
+              <>
+                <i className="material-icons" style={{ color: "#fff" }}>
+                  chevron_right
+                </i>
+                <div className="tooltip">開く</div>
+              </>
+            )}
+          </div>
         </div>
+        <main className="content">
+          <Outlet />
+        </main>
       </div>
-      <main className="content">
-        <Outlet />
-      </main>
-    </div>
+    </>
   );
 };
 
