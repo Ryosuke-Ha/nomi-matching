@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import firebase from "firebase/compat/app";
 import { useNavigate } from "react-router-dom";
 import UserDetailPanel from "./UserDetailPanel";
 import "./SearchPage.css";
+import { db } from "../../../firebaseConfig";
 
 interface User {
   name: string;
@@ -12,6 +14,7 @@ interface User {
   availability: string;
   personality: string;
   maxPeople: number;
+  gender: string;
 }
 
 const SearchPage: React.FC = () => {
@@ -21,34 +24,78 @@ const SearchPage: React.FC = () => {
   const [results, setResults] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [sentOffers, setSentOffers] = useState<string[]>([]);
+  const [areas, setAreas] = useState<{ id: number; name: string }[]>([]);
   const navigate = useNavigate();
 
-  const handleSearch = (e: React.FormEvent) => {
+  useEffect(() => {
+    db.collection("areaMst")
+      .get()
+      .then((snapshot) => {
+        const list = snapshot.docs.map(
+          (doc) => doc.data() as { id: number; name: string }
+        );
+        setAreas(list);
+      })
+      .catch((err) => console.error("Error fetching areas:", err));
+  }, []);
+
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO fetch real data
-    const mock: User[] = [
-      {
-        name: "山田 太郎",
-        age: "28",
-        region: "東京",
-        intro: "お酒好きです",
-        image: "",
-        availability: "月・水・金 19:00-22:00",
-        personality: "社交的",
-        maxPeople: 4,
-      },
-      {
-        name: "鈴木 花子",
-        age: "32",
-        region: "大阪",
-        intro: "楽しく飲みたい",
-        image: "",
-        availability: "火・木 18:00-21:00",
-        personality: "明るい",
-        maxPeople: 3,
-      },
-    ];
-    setResults(mock);
+    try {
+      // Build query on userProfiles
+      let query: firebase.firestore.Query<firebase.firestore.DocumentData> =
+        db.collection("userProfiles");
+      if (age) {
+        const [min, max] = age.split("-").map(Number);
+        query = query.where("age", ">=", min).where("age", "<=", max);
+      }
+      if (gender) {
+        const genderNum = Number.parseInt(gender);
+        query = query.where("gender", "==", genderNum);
+      }
+      if (region) {
+        query = query.where("area", "==", Number(region));
+      }
+      const profileSnap = await query.get();
+
+      // Map profiles with optional account join
+      const users: User[] = await Promise.all(
+        profileSnap.docs.map(async (doc) => {
+          const p = doc.data();
+          return {
+            name: p.name,
+            age: String(p.age),
+            region: areas.filter((a) => a.id === p.area)[0]?.name || "",
+            intro: p.intro,
+            image: p.imageURL || "",
+            availability: `${p.availableDays.join("・")} ${
+              p.availableTimeStart
+            }-${p.availableTimeEnd}`,
+            personality: p.personality,
+            maxPeople: p.partySize,
+            gender: convertGender(p.gender),
+          };
+        })
+      );
+
+      setResults(users);
+    } catch (error) {
+      console.error("Error fetching profiles:", error);
+      setResults([]);
+    }
+  };
+
+  const convertGender = (gender: number): string => {
+    switch (gender) {
+      case 1:
+        return "男性";
+      case 2:
+        return "女性";
+      case 3:
+        return "その他";
+      default:
+        return "";
+    }
   };
 
   return (
@@ -60,20 +107,30 @@ const SearchPage: React.FC = () => {
           <select value={age} onChange={(e) => setAge(e.target.value)}>
             <option value="">全て</option>
             <option value="20-29">20〜29</option>
+            <option value="30-39">30〜39</option>
+            <option value="40-49">40〜49</option>
+            <option value="50-59">50〜59</option>
+            <option value="60-69">60〜69</option>
           </select>
         </div>
         <div className="form-group">
           <label>性別</label>
           <select value={gender} onChange={(e) => setGender(e.target.value)}>
             <option value="">全て</option>
-            <option value="male">男性</option>
+            <option value="1">男性</option>
+            <option value="2">女性</option>
+            <option value="3">その他</option>
           </select>
         </div>
         <div className="form-group">
           <label>地域</label>
           <select value={region} onChange={(e) => setRegion(e.target.value)}>
             <option value="">全て</option>
-            <option value="tokyo">東京</option>
+            {areas.map((a) => (
+              <option key={a.id} value={String(a.id)}>
+                {a.name}
+              </option>
+            ))}
           </select>
         </div>
         <button type="submit" className="search-button">
@@ -100,7 +157,7 @@ const SearchPage: React.FC = () => {
                 <div className="card-content">
                   <h3>{user.name}</h3>
                   <p>
-                    {user.age}歳・{user.region}
+                    {user.gender}・{user.age}歳・{user.region}
                   </p>
                   <p className="intro">{user.intro}</p>
                 </div>
