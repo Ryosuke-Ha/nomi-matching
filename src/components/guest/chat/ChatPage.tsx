@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./ChatPage.css";
 
 // helper to format display time
@@ -40,23 +41,25 @@ const ChatPage: React.FC = () => {
   return (
     <div className="chat-history">
       {chats.map((chat) => (
-        <div key={chat.id} className="chat-item">
-          <i className="material-icons avatar">person</i>
-          <div className="content">
-            <div className="info">
-              <div className="name-time">
-                <span className="name">{chat.name}</span>
-                <span className="time">
-                  {formatDisplayTime(chat.createdAt)}
-                </span>
-              </div>
-              <div className="last-message">
-                <span className="message-text">{chat.lastMessage}</span>
+        <Link key={chat.id} to={`/chat/${chat.id}`} className="chat-item-link">
+          <div className="chat-item">
+            <i className="material-icons avatar">person</i>
+            <div className="content">
+              <div className="info">
+                <div className="name-time">
+                  <span className="name">{chat.name}</span>
+                  <span className="time">
+                    {formatDisplayTime(chat.createdAt)}
+                  </span>
+                </div>
+                <div className="last-message">
+                  <span className="message-text">{chat.lastMessage}</span>
+                </div>
               </div>
             </div>
+            {chat.unread && <span className="new-badge">NEW</span>}
           </div>
-          {chat.unread && <span className="new-badge">NEW</span>}
-        </div>
+        </Link>
       ))}
     </div>
   );

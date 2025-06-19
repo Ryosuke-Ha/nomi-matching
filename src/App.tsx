@@ -7,6 +7,7 @@ import HomePage from "./components/guest/home/HomePage";
 import SearchPage from "./components/guest/search/SearchPage";
 import PaymentPage from "./components/guest/payment/PaymentPage";
 import ChatPage from "./components/guest/chat/ChatPage";
+import ChatDetailPage from "./components/guest/chat/ChatDetailPage";
 import LoginPage from "./components/guest/auth/LoginPage";
 import SignupPage from "./components/guest/auth/SignupPage";
 import "./App.css";
@@ -25,6 +26,7 @@ function App() {
             <Route path="search" element={<SearchPage />} />
             <Route path="payment" element={<PaymentPage />} />
             <Route path="chat" element={<ChatPage />} />
+            <Route path="chat/:id" element={<ChatDetailPage />} />
           </Route>
         </Route>
         <Route path="/error" element={<ErrorPage />} />
