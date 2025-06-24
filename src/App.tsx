@@ -5,7 +5,6 @@ import { PublicRoute, PrivateRoute } from "./components/guest/auth/RouteGuards";
 import Layout from "./components/guest/Layout";
 import HomePage from "./components/guest/home/HomePage";
 import SearchPage from "./components/guest/search/SearchPage";
-import PaymentPage from "./components/guest/payment/PaymentPage";
 import ChatPage from "./components/guest/chat/ChatPage";
 import ChatDetailPage from "./components/guest/chat/ChatDetailPage";
 import LoginPage from "./components/guest/auth/LoginPage";
@@ -24,9 +23,9 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
             <Route path="search" element={<SearchPage />} />
-            <Route path="payment" element={<PaymentPage />} />
             <Route path="chat" element={<ChatPage />} />
             <Route path="chat/:id" element={<ChatDetailPage />} />
+            <Route path="*" element={<HomePage />} />
           </Route>
         </Route>
         <Route path="/error" element={<ErrorPage />} />
