@@ -102,7 +102,7 @@ const SearchPage: React.FC = () => {
 
   return (
     <div className="search-page">
-      <h2>飲み友達検索</h2>
+      <h2>SEARCH</h2>
       <form className="search-area" onSubmit={handleSearch}>
         <div className="form-group">
           <label>年齢</label>

@@ -9,9 +9,8 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = () => {
   const [open, setOpen] = useState(true);
   const menuItems = [
-    { title: "飲み友達検索", icon: "search", path: "/search" },
-    { title: "チャット機能", icon: "chat", path: "/chat" },
-    { title: "決済機能", icon: "payment", path: "/payment" },
+    { title: "SEARCH", icon: "search", path: "/search" },
+    { title: "CHAT", icon: "chat", path: "/chat" },
   ];
 
   return (
@@ -28,8 +27,8 @@ const Layout: React.FC<LayoutProps> = () => {
             <i className="material-icons" style={{ color: "#fff" }}>
               home
             </i>
-            {open && <span className="title">ホーム</span>}
-            {!open && <div className="tooltip">ホーム</div>}
+            {open && <span className="title">HOME</span>}
+            {!open && <div className="tooltip">HOME</div>}
           </Link>
           <ul>
             {menuItems.map((item, idx) => (
@@ -48,14 +47,14 @@ const Layout: React.FC<LayoutProps> = () => {
                 <i className="material-icons" style={{ color: "#fff" }}>
                   chevron_left
                 </i>
-                <div className="tooltip">閉じる</div>
+                <div className="tooltip">CLOSE</div>
               </>
             ) : (
               <>
                 <i className="material-icons" style={{ color: "#fff" }}>
                   chevron_right
                 </i>
-                <div className="tooltip">開く</div>
+                <div className="tooltip">OPEN</div>
               </>
             )}
           </div>
