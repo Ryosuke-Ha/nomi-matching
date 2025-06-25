@@ -18,6 +18,7 @@ const LoginPage: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    // TODO : refactor
     try {
       const doc = await db.collection("accounts").doc(id).get();
       if (!doc.exists) throw new Error("No user");

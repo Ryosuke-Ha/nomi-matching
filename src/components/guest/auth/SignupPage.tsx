@@ -71,6 +71,7 @@ const SignupPage: React.FC = () => {
   };
 
   const handleSubmit = async (e: FormEvent) => {
+    // TODO : refactor
     e.preventDefault();
     const uid = form.id; // TODO: replace with real Auth UID
     const salt = bcrypt.genSaltSync(10);

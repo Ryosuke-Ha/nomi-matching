@@ -30,6 +30,7 @@ const SearchPage: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // TODO : refactor
     db.collection("areaMst")
       .get()
       .then((snapshot) => {
@@ -44,6 +45,7 @@ const SearchPage: React.FC = () => {
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      // TODO : refactor
       // Build query on userProfiles
       let query: firebase.firestore.Query<firebase.firestore.DocumentData> =
         db.collection("userProfiles");
