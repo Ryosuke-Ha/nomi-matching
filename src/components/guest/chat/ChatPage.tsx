@@ -20,7 +20,7 @@ interface Chat {
   offerId?: string;
   createdAt: { toDate: () => Date } | string;
   lastMessage?: string;
-  unread?: boolean;
+  isRead: boolean;
   friendName: string;
 }
 
@@ -104,7 +104,7 @@ const ChatPage: React.FC = () => {
             guestUid: uid,
             friendUid: friendUid,
             createdAt: lastMessage?.timestamp,
-            unread: lastMessage?.isRead,
+            isRead: lastMessage?.isRead,
             lastMessage: lastMessage?.text,
             friendName: friendName,
             ...chatData,
@@ -145,7 +145,7 @@ const ChatPage: React.FC = () => {
             guestUid: uid,
             friendUid: friendUid,
             createdAt: lastMessage?.timestamp,
-            unread: lastMessage?.isRead,
+            isRead: lastMessage?.isRead,
             lastMessage: lastMessage?.text,
             friendName: friendName,
             ...chatData,
@@ -191,7 +191,7 @@ const ChatPage: React.FC = () => {
                   </div>
                 </div>
               </div>
-              {chat.unread && <span className="new-badge">NEW</span>}
+              {!chat.isRead && <span className="new-badge">NEW</span>}
             </div>
           </Link>
         );
