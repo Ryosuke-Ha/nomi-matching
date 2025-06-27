@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import UserDetailPanel from "./UserDetailPanel";
+import UserDetailPanel from "../components/UserDetailPanel";
 import "./SearchPage.css";
 import { User } from "../../domain/models/User";
 import { UserRepositoryFirebase } from "../../infrastructure/firebase/UserRepositoryFirebase";

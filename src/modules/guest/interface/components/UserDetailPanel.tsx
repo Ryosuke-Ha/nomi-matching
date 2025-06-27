@@ -1,18 +1,6 @@
 import React, { useState } from "react";
 import "./UserDetailPanel.css";
-
-interface User {
-  name: string;
-  age: string;
-  region: string;
-  intro: string;
-  image: string;
-  availableDays: number[];
-  availableTimeStart: number;
-  availableTimeEnd: number;
-  personality: string;
-  maxPeople: number;
-}
+import { User } from "../../domain/models/User";
 
 interface Props {
   user: User;
@@ -127,5 +115,3 @@ const UserDetailPanel: React.FC<Props> = ({
 };
 
 export default UserDetailPanel;
-
-export {};
