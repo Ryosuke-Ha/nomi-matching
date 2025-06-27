@@ -1,23 +1,12 @@
 import React, { useState, useEffect } from "react";
-import firebase from "firebase/compat/app";
 import { useNavigate } from "react-router-dom";
 import UserDetailPanel from "./UserDetailPanel";
 import "./SearchPage.css";
-import { db } from "../../../../shared/config/firebaseConfig";
-
-interface User {
-  name: string;
-  age: string;
-  region: string;
-  intro: string;
-  image: string;
-  availableDays: number[];
-  availableTimeStart: number;
-  availableTimeEnd: number;
-  personality: string;
-  maxPeople: number;
-  gender: string;
-}
+import { User } from "../../domain/models/User";
+import { UserRepositoryFirebase } from "../../infrastructure/firebase/UserRepositoryFirebase";
+import { SearchUsersUseCase } from "../../application/usecases/SearchUsersUseCase";
+import { FetchAreasUseCase } from "../../../../shared/application/usecases/FetchAreasUseCase";
+import { AreaRepositoryFirebase } from "../../../../shared/infrastructure/firebase/AreaRepositoryFirebase";
 
 const SearchPage: React.FC = () => {
   const [age, setAge] = useState("");
@@ -28,77 +17,30 @@ const SearchPage: React.FC = () => {
   const [sentOffers, setSentOffers] = useState<string[]>([]);
   const [areas, setAreas] = useState<{ id: number; name: string }[]>([]);
   const navigate = useNavigate();
+  const useCase = new SearchUsersUseCase(new UserRepositoryFirebase());
 
   useEffect(() => {
-    // TODO : refactor
-    db.collection("areaMst")
-      .get()
-      .then((snapshot) => {
-        const list = snapshot.docs.map(
-          (doc) => doc.data() as { id: number; name: string }
-        );
-        setAreas(list);
-      })
-      .catch((err) => console.error("Error fetching areas:", err));
+    const fetch = async () => {
+      const useCase = new FetchAreasUseCase(new AreaRepositoryFirebase());
+      const result = await useCase.execute();
+      setAreas(result);
+    };
+    fetch().catch((err) => console.error("地域マスタの取得失敗:", err));
   }, []);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // TODO : refactor
-      // Build query on userProfiles
-      let query: firebase.firestore.Query<firebase.firestore.DocumentData> =
-        db.collection("userProfiles");
-      if (age) {
-        const [min, max] = age.split("-").map(Number);
-        query = query.where("age", ">=", min).where("age", "<=", max);
-      }
-      if (gender) {
-        const genderNum = Number.parseInt(gender);
-        query = query.where("gender", "==", genderNum);
-      }
-      if (region) {
-        query = query.where("area", "==", Number(region));
-      }
-      const profileSnap = await query.get();
-
-      // Map profiles with optional account join
-      const users: User[] = await Promise.all(
-        profileSnap.docs.map(async (doc) => {
-          const p = doc.data();
-          return {
-            name: p.name,
-            age: String(p.age),
-            region: areas.filter((a) => a.id === p.area)[0]?.name || "",
-            intro: p.intro,
-            image: p.imageURL || "",
-            availableDays: p.availableDays,
-            availableTimeStart: p.availableTimeStart,
-            availableTimeEnd: p.availableTimeEnd,
-            personality: p.personality,
-            maxPeople: p.partySize,
-            gender: convertGender(p.gender),
-          };
-        })
-      );
-
-      setResults(users);
-    } catch (error) {
-      console.error("Error fetching profiles:", error);
+      const users = await useCase.execute(age, gender, region);
+      // 地域IDを地域名に変換
+      const enriched = users.map((u) => ({
+        ...u,
+        region: areas.find((a) => String(a.id) === region)?.name || u.region,
+      }));
+      setResults(enriched);
+    } catch (err) {
+      console.error("検索エラー:", err);
       setResults([]);
-    }
-  };
-
-  const convertGender = (gender: number): string => {
-    switch (gender) {
-      case 1:
-        return "男性";
-      case 2:
-        return "女性";
-      case 3:
-        return "その他";
-      default:
-        return "";
     }
   };
 
