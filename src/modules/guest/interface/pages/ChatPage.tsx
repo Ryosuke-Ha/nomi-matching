@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { db } from "../../../firebaseConfig";
+import { db } from "../../../../shared/config/firebaseConfig";
 import "./ChatPage.css";
 
 // helper to format display time

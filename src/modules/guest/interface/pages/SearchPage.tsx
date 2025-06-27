@@ -3,7 +3,7 @@ import firebase from "firebase/compat/app";
 import { useNavigate } from "react-router-dom";
 import UserDetailPanel from "./UserDetailPanel";
 import "./SearchPage.css";
-import { db } from "../../../firebaseConfig";
+import { db } from "../../../../shared/config/firebaseConfig";
 
 interface User {
   name: string;

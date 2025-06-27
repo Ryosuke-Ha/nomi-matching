@@ -1,14 +1,14 @@
 import React from "react";
-import ErrorPage from "./components/guest/auth/ErrorPage";
+import ErrorPage from "./modules/guest/interface/pages/ErrorPage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { PublicRoute, PrivateRoute } from "./components/guest/auth/RouteGuards";
-import Layout from "./components/guest/Layout";
-import HomePage from "./components/guest/home/HomePage";
-import SearchPage from "./components/guest/search/SearchPage";
-import ChatPage from "./components/guest/chat/ChatPage";
-import ChatDetailPage from "./components/guest/chat/ChatDetailPage";
-import LoginPage from "./components/guest/auth/LoginPage";
-import SignupPage from "./components/guest/auth/SignupPage";
+import { PublicRoute, PrivateRoute } from "./shared/utils/RouteGuards";
+import Layout from "./modules/guest/interface/Layout";
+import HomePage from "./modules/guest/interface/pages/HomePage";
+import SearchPage from "./modules/guest/interface/pages/SearchPage";
+import ChatPage from "./modules/guest/interface/pages/ChatPage";
+import ChatDetailPage from "./modules/guest/interface/pages/ChatDetailPage";
+import LoginPage from "./modules/guest/interface/pages/LoginPage";
+import SignupPage from "./modules/guest/interface/pages/SignupPage";
 import "./App.css";
 
 function App() {

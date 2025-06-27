@@ -1,6 +1,6 @@
 import React, { useState, FormEvent, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { db } from "../../../firebaseConfig";
+import { db } from "../../../../shared/config/firebaseConfig";
 import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
 import bcrypt from "bcryptjs";

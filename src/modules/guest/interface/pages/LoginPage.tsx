@@ -1,5 +1,5 @@
 import React, { useState, FormEvent, useEffect } from "react";
-import { db } from "../../../firebaseConfig";
+import { db } from "../../../../shared/config/firebaseConfig";
 import bcrypt from "bcryptjs";
 import { Link, useNavigate } from "react-router-dom";
 import "./LoginPage.css";
