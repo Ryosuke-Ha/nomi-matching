@@ -21,9 +21,9 @@
 
 /* Sidebar container */
 .sidebar {
+  position: relative;
   display: flex;
   flex-direction: column;
-  height: 100vh;
   background: #343a40;
   color: #fff;
   transition: width 0.3s ease;
@@ -41,12 +41,19 @@
 
 /* Header (Home button) */
 .sidebar-header.menu-item {
-  padding: 1rem;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #fff; /* enforce white */
-  justify-content: center; /* center horizontally */
-  text-align: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  color: #fff;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+.sidebar-header.menu-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+.sidebar-header.menu-item .title {
+  margin-left: 1rem;
 }
 
 /* Menu list */
@@ -85,40 +92,28 @@
   white-space: nowrap;
 }
 
-/* Toggle button */
-/* Toggle button fixed bottom-left */
+/* Toggle button fixed bottom-left, match menu-item width */
 .sidebar .toggle-button {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  padding: 0.75rem;
+  padding: 0.75rem 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #fff;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background 0.2s ease;
 }
 .sidebar .toggle-button i.material-icons {
-  color: #fff; /* ensure chevron icon white */
-}
-.sidebar .toggle-button i.material-icons {
-  color: #fff !important; /* override parent dark color */
-}
-.sidebar .toggle-button i.material-icons {
-  color: #fff !important; /* force chevron white */
+  color: #fff;
+  margin-right: 1rem;
 }
 .sidebar .toggle-button:hover {
   background: rgba(255, 255, 255, 0.1);
-}
-/* Ensure toggle icon is white */
-.sidebar.open .toggle-button i.material-icons,
-.sidebar.closed .toggle-button i.material-icons {
-  color: #fff; /* force chevron icon white in both states */
-}
-/* Position toggle tooltip next to button */
-.sidebar .toggle-button .tooltip {
-  left: 50%;
-  bottom: 100%;
-  transform: translateX(-50%) translateY(-4px);
 }
 
 /* Tooltip container */
@@ -130,34 +125,13 @@
   border-radius: 4px;
   font-size: 0.75rem;
   white-space: nowrap;
-  transform: none;
   opacity: 0;
-  transition: opacity 0.2s ease;
   pointer-events: none;
   z-index: 1000;
+  transition: opacity 0.2s ease;
 }
 
-/* Tooltip default hidden */
-.tooltip {
-  opacity: 0;
-}
-/* Show tooltip on hover near toggle/button */
-.sidebar ul li .menu-item:hover .tooltip,
-.sidebar .toggle-button:hover .tooltip {
-  opacity: 1; /* show tooltip only on hover */
-}
-/* Position tooltips */
-.sidebar.closed ul li .menu-item .tooltip {
-  left: 100%;
-  top: 50%;
-  transform: translateY(-50%) translateX(4px);
-}
-.sidebar.open .toggle-button .tooltip,
-.sidebar.closed .toggle-button .tooltip {
-  left: 50%;
-  bottom: 100%;
-  transform: translateX(-50%) translateY(-4px);
-}
+/* Show tooltip on hover */
 .sidebar.closed ul li .menu-item:hover .tooltip,
 .sidebar .toggle-button:hover .tooltip {
   opacity: 1;
@@ -168,4 +142,84 @@
   flex: 1;
   padding: 2rem;
   overflow: auto;
+}
+
+/* Mobile header */
+.mobile-header {
+  display: none;
+}
+
+/* Mobile bottom nav and responsive */
+@media (max-width: 768px) {
+  /* Show header */
+  .mobile-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #343a40;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+  }
+  .mobile-header .material-icons {
+    margin-right: 0.5rem;
+    font-size: 20px;
+  }
+  .mobile-header .mobile-title {
+    font-size: 1.25rem;
+    color: #fff;
+    flex: 1;
+    text-align: center;
+  }
+
+  .layout-container {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+  }
+  .sidebar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100% !important;
+    height: 60px;
+    flex-direction: row;
+    background: #343a40;
+    overflow: hidden;
+    padding: 0;
+    margin-top: 0;
+  }
+  .sidebar.open {
+    width: 100% !important;
+  }
+  .sidebar.closed {
+    width: 100% !important;
+  }
+  .sidebar ul {
+    display: flex;
+    margin: 0;
+    padding: 0;
+  }
+  .sidebar ul li {
+    flex: 1;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .sidebar ul li .menu-item {
+    padding: 0;
+    justify-content: center;
+  }
+  .sidebar ul li .menu-item i.material-icons {
+    font-size: 28px;
+  }
+  .sidebar-header,
+  .toggle-button,
+  .title,
+  .tooltip {
+    display: none !important;
+  }
+  .content {
+    padding-bottom: 60px;
+  }
 }
