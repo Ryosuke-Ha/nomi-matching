@@ -1,6 +1,4 @@
-import React, { useState, FormEvent, useEffect } from "react";
-import { db } from "../../../../shared/config/firebaseConfig";
-import bcrypt from "bcryptjs";
+import React, { FormEvent, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./LoginPage.css";
 import {
@@ -8,12 +6,13 @@ import {
   saveAuthToSession,
   saveUidToSession,
 } from "../../../../shared/utils/session";
+import { useLoginForm } from "../../application/hooks/useLoginForm";
+import { LoginUserUseCase } from "../../application/usecases/LoginUserUseCase";
+import { UserRepositoryFirebase } from "../../infrastructure/firebase/UserRepositoryFirebase";
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
-  const [id, setId] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(false);
+  const { id, password, setId, setPassword, error, setError } = useLoginForm();
 
   useEffect(() => {
     if (getAuthFromSession()) {
@@ -23,19 +22,12 @@ const LoginPage: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    // TODO : refactor
+    const useCase = new LoginUserUseCase(new UserRepositoryFirebase());
     try {
-      const doc = await db.collection("accounts").doc(id).get();
-      if (!doc.exists) throw new Error("No user");
-      const data = doc.data() as { passwordHash: string };
-      const match = bcrypt.compareSync(password, data.passwordHash);
-      if (match) {
-        saveAuthToSession(true);
-        saveUidToSession(id);
-        navigate("/");
-      } else {
-        throw new Error("Invalid");
-      }
+      await useCase.execute(id, password);
+      saveAuthToSession(true);
+      saveUidToSession(id);
+      navigate("/");
     } catch {
       setError(true);
     }

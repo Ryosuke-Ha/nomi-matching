@@ -2,8 +2,17 @@ import firebase from "firebase/compat/app";
 import { db } from "../../../../shared/config/firebaseConfig";
 import { User, convertGender } from "../../domain/models/User";
 import { UserRepository } from "../../domain/repositories/UserRepository";
+import bcrypt from "bcryptjs";
 
 export class UserRepositoryFirebase implements UserRepository {
+  async verifyUserCredentials(id: string, password: string): Promise<boolean> {
+    const doc = await db.collection("accounts").doc(id).get();
+    if (!doc.exists) return false;
+
+    const data = doc.data() as { passwordHash: string };
+    return bcrypt.compareSync(password, data.passwordHash);
+  }
+
   async search({
     age,
     gender,
