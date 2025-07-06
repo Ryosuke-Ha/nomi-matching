@@ -3,6 +3,11 @@ import { db } from "../../../../shared/config/firebaseConfig";
 import bcrypt from "bcryptjs";
 import { Link, useNavigate } from "react-router-dom";
 import "./LoginPage.css";
+import {
+  getAuthFromSession,
+  saveAuthToSession,
+  saveUidToSession,
+} from "../../../../shared/utils/session";
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -11,7 +16,7 @@ const LoginPage: React.FC = () => {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    if (sessionStorage.getItem("auth") === "true") {
+    if (getAuthFromSession()) {
       navigate("/");
     }
   }, [navigate]);
@@ -25,8 +30,8 @@ const LoginPage: React.FC = () => {
       const data = doc.data() as { passwordHash: string };
       const match = bcrypt.compareSync(password, data.passwordHash);
       if (match) {
-        sessionStorage.setItem("auth", "true");
-        sessionStorage.setItem("uid", id);
+        saveAuthToSession(true);
+        saveUidToSession(id);
         navigate("/");
       } else {
         throw new Error("Invalid");

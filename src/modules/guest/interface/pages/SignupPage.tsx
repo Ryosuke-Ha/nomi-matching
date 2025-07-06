@@ -5,6 +5,10 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
 import bcrypt from "bcryptjs";
 import "./SignupPage.css";
+import {
+  saveAuthToSession,
+  saveUidToSession,
+} from "../../../../shared/utils/session";
 
 type FormData = {
   id: string;
@@ -99,8 +103,8 @@ const SignupPage: React.FC = () => {
         partySize: Number(form.participants),
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       });
-    sessionStorage.setItem("auth", "true");
-    sessionStorage.setItem("uid", uid);
+    saveAuthToSession(true);
+    saveUidToSession(uid);
     navigate("/");
   };
 

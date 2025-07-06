@@ -5,10 +5,11 @@ import { Chat } from "../../domain/models/Chat";
 import { ChatRepositoryFirebase } from "../../infrastructure/firebase/ChatRepositoryFirebase";
 import { GetUserChatsUseCase } from "../../application/usecases/GetUserChatsUseCase";
 import ChatListItem from "../components/ChatListItem";
+import { getUidFromSession } from "../../../../shared/utils/session";
 
 const ChatPage: React.FC = () => {
   const [chats, setChats] = useState<Chat[]>([]);
-  const uid = sessionStorage.getItem("uid")!;
+  const uid = getUidFromSession();
   const navigate = useNavigate();
 
   useEffect(() => {

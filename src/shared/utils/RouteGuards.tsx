@@ -1,7 +1,8 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
+import { getAuthFromSession } from "./session";
 
-const isAuthenticated = () => sessionStorage.getItem("auth") === "true";
+const isAuthenticated = () => getAuthFromSession();
 
 export function PublicRoute() {
   return isAuthenticated() ? <Navigate to="/" replace /> : <Outlet />;
