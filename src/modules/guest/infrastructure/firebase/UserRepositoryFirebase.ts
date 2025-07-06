@@ -42,7 +42,7 @@ export class UserRepositoryFirebase implements UserRepository {
     if (!doc.exists) return false;
 
     const data = doc.data() as { passwordHash: string };
-    return bcrypt.compareSync(password, data.passwordHash);
+    return await bcrypt.compareSync(password, data.passwordHash);
   }
 
   async search({
