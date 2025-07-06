@@ -15,10 +15,12 @@ function App() {
   return (
     <Router>
       <Routes>
+        {/* before login */}
         <Route element={<PublicRoute />}>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
         </Route>
+        {/* after login */}
         <Route element={<PrivateRoute />}>
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
